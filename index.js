@@ -33,7 +33,6 @@ const downloadImage = async (bucket, key) => {
 const resizeImage = async (imageStream) => {
   console.log('Resizing started.');
   try {
-    // Return the result of the asynchronous operation
     return await imageStream.pipe(sharp().resize({ height: 200 })).toBuffer();
   } catch (err) {
     console.error('Resize error:', err);
