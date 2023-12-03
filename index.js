@@ -19,10 +19,7 @@ const downloadImage = async (bucket, key) => {
     const getObjectResponse = await s3Client.send(
       new GetObjectCommand(getObjectParams)
     );
-    console.log(
-      'Download has started. GetObjectResponse is:',
-      getObjectResponse
-    );
+    console.log('Download started.');
     return getObjectResponse.Body;
   } catch (err) {
     console.error('Download error:', err);
@@ -60,12 +57,10 @@ const uploadImage = async (bucket, fileName, imageBuffer) => {
 };
 
 exports.handler = async (event) => {
-  console.log('Lambda function has been invoked.');
   for (const record of event.Records) {
     const bucketName = record.s3.bucket.name;
-    const key = record.s3.object.key;
-
-    const fileNameWithoutPrefix = key.replace('original-files/', '');
+    const key = decodeURIComponent(record.s3.object.key.replace(/\+/g, ' '));
+    const fileNameWithoutPrefix = key.split('/').pop();
 
     try {
       const downloadedImageBuffer = await downloadImage(bucketName, key);
