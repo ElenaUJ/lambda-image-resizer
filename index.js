@@ -19,7 +19,6 @@ const downloadImage = async (bucket, key) => {
     const getObjectResponse = await s3Client.send(
       new GetObjectCommand(getObjectParams)
     );
-    console.log('Download started.');
     return getObjectResponse.Body;
   } catch (err) {
     console.error('Download error:', err);
@@ -28,7 +27,6 @@ const downloadImage = async (bucket, key) => {
 };
 
 const resizeImage = async (imageStream) => {
-  console.log('Resizing started.');
   try {
     return await imageStream.pipe(sharp().resize({ height: 200 })).toBuffer();
   } catch (err) {
